@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-public class AppleToastView : UIView, ToastView {
+public class AppleToastView : UIVisualEffectView, ToastView {
     private let config: ToastViewConfiguration
     
     private let child: UIView
-    
+
     private var toast: Toast?
     
     public init(
@@ -22,8 +22,12 @@ public class AppleToastView : UIView, ToastView {
         self.config = config
         self.child = child
         super.init(frame: .zero)
-        
-        addSubview(child)
+
+        if #available(iOS 26, *) {
+            effect = UIGlassEffect()
+        }
+
+        contentView.addSubview(child)
     }
     
     public override func removeFromSuperview() {

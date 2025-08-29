@@ -128,7 +128,7 @@ public class Toast {
     /// - Returns: A new Toast view with the configured layout
     public required init(view: ToastView, config: ToastConfiguration) {
         self.config = config
-        self.view = view
+        self.view = wrapInGlassView(view)
         
         for dismissable in config.dismissables {
             switch dismissable {
@@ -154,10 +154,26 @@ public class Toast {
         show(after: time)
     }
 #endif
-    
+
+    private func wrapInGlassView(_ view: UIView) -> UIView {
+        guard #available(iOS 26, *) else {
+            return view
+        }
+
+        let effectView = UIVisualEffectView()
+
+        let effect = UIGlassEffect()
+        effectView.effect = effect
+
+        effectView.contentView.addSubview(view)
+
+        return effectView
+    }
+
     /// Show the toast
     /// - Parameter delay: Time after which the toast is shown
     public func show(after delay: TimeInterval = 0) {
+        
         if let backgroundView = self.createBackgroundView() {
             self.backgroundView = backgroundView
             config.view?.addSubview(backgroundView) ?? ToastHelper.topController()?.view.addSubview(backgroundView)
