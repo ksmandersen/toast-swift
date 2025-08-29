@@ -21,7 +21,7 @@ public class AppleToastView : UIVisualEffectView, ToastView {
     ) {
         self.config = config
         self.child = child
-        super.init(frame: .zero)
+        super.init(effect: nil)
 
         if #available(iOS 26, *) {
             effect = UIGlassEffect()
